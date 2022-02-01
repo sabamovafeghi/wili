@@ -1,19 +1,11 @@
 var Wili = {};
 Wili.ready = false;
 Wili.readyJobs = [];
-Wili.Component = class Component {
-    id = "";
-    elementRef = null;
-    state = {
-        fault: false,
-        loaded: false,
-        empty: true,
-        phase: "",
-        action: false,
-        page: 1
-    }
+Wili.Component = class Component {    
     constructor() {
         this.id = [...Array(32)].map(() => Math.floor(Math.random() * 15).toString(16)).join('');
+        this.elementRef = null;
+        this.state = {}
     }
     setState = (inputs) => {
         this.state = {...this.state, ...inputs}
