@@ -6,12 +6,10 @@ Wili  is a 2kb Light-weight react-like maximum-optimistic library for building u
 Welcome componenet:
 
     class Welcome extends Wili.Component {
-        i = 0;
-        interval;
+        state = {i: 0, interval: null}
         componentDidMount = () => {
-            this.interval = setInterval(() => {
-                this.i++;
-                this.forceUpdate();
+            this.state.interval = setInterval(() => {
+                this.setState({i: this.state.i + 1})
             }, 1000)
         }
         componentDidUnmount = () => clearInterval(this.interval)
