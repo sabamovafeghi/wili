@@ -18,7 +18,7 @@ Welcome componenet:
         render = () => `<p>Welcome to Wili project. Forcing update No. ${this.i}</p>`;
     }
 
-Welcome componenet:
+App componenet:
 
     class App extends Wili.Component {
         render = () => {
