@@ -13,7 +13,7 @@ Welcome componenet:
             }, 1000)
         }
         componentDidUnmount = () => clearInterval(this.state.interval)
-        render = () => `<p>Welcome to Wili project. Forcing update No. ${this.i}</p>`;
+        render = () => `<p>Welcome to Wili project. Forcing update No. ${this.state.i}</p>`;
     }
 
 App componenet:
