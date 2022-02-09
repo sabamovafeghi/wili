@@ -2,9 +2,10 @@ var Wili = {};
 Wili.ready = false;
 Wili.readyJobs = [];
 Wili.Component = class Component {    
-    constructor() {
+    constructor(props = {}) {
         this.id = [...Array(32)].map(() => Math.floor(Math.random() * 15).toString(16)).join('');
         this.elementRef = null;
+        this.props = {};
         this.state = {}
     }
     setState = (inputs) => {
@@ -50,8 +51,11 @@ Wili.Root = class Root extends Wili.Component {
     render = () => `<p>Wili framwork is working!</p>`;
 }
 Wili.build = (rootElementId = "root", rootComponent = new Wili.Root()) => {
-    let rootElement = document.getElementById(rootElementId);
-    rootElement.innerHTML = rootComponent.toString();
-    Wili.readyJobs.forEach((f) => f());
-    Wili.ready = true;
+    return new Promise((resolve) => {
+        let rootElement = document.getElementById(rootElementId);
+        rootElement.innerHTML = rootComponent.toString();
+        Wili.readyJobs.forEach((f) => f());
+        Wili.ready = true;
+        resolve();
+    });
 }
