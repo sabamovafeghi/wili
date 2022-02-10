@@ -1,12 +1,24 @@
 var Wili = {};
+
 Wili.ready = false;
 Wili.readyJobs = [];
-Wili.Component = class Component {    
+Wili.rand = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+Wili.rand16 = length => [...Array(length)].map(() => Wili.rand(0, 15).toString(16)).join('');
+Wili.Component = class Component {
+    id = "";
+    elementRef = null;
+    props = {};
+    state = {
+        fault: false,
+        loaded: false,
+        empty: true,
+        phase: "",
+        action: false,
+        page: 1
+    }
     constructor(props = {}) {
-        this.id = [...Array(32)].map(() => Math.floor(Math.random() * 15).toString(16)).join('');
-        this.elementRef = null;
-        this.props = {};
-        this.state = {}
+        this.id = Wili.rand16(32);
+        this.props = props;
     }
     setState = (inputs) => {
         this.state = {...this.state, ...inputs}
@@ -43,19 +55,20 @@ Wili.Component = class Component {
     }
     toString = () => {
         if (!Wili.ready) Wili.readyJobs.push(this.mount);
-        return `<template id="${this.id}">${this.render()}</template>`
+        let rendered = this.render();
+        return `<template id="${this.id}">${Array.isArray(rendered) ? rendered.join("") : rendered}</template>`
     }
-    render = () => ""
+    render = () => this.props.children;
 }
-Wili.Root = class Root extends Wili.Component {
-    render = () => `<p>Wili framwork is working!</p>`;
+Wili.OnClickHandler = class OnClickHandler extends Wili.Component {
+    componentDidMount = () => this.elementRef.onclick = this.props.onclick;
 }
-Wili.build = (rootElementId = "root", rootComponent = new Wili.Root()) => {
+Wili.build = (rootElementId = "root", rootComponent = new Wili.Component()) => {
     return new Promise((resolve) => {
         let rootElement = document.getElementById(rootElementId);
         rootElement.innerHTML = rootComponent.toString();
         Wili.readyJobs.forEach((f) => f());
         Wili.ready = true;
         resolve();
-    });
+    })
 }
